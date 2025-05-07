@@ -3,26 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>Weather App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Weather App</h1>
-    <form method="POST">
-        <label for="location">Enter your location:</label>
-        <input type="text" id="location" name="location" required>
-        <button type="submit">Get Weather</button>
-    </form>
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+    <div class="container">
+        <h1>🌤️ Weather App</h1>
 
-    {% if weather_data %}
-        <h2>Weather for {{ weather_data.location.name }}, {{ weather_data.location.country }}</h2>
-        <p>Temperature: {{ weather_data.current.temp_c }}°C / {{ weather_data.current.temp_f }}°F</p>
-        <p>Condition: {{ weather_data.current.condition.text }}</p>
-        <img src="{{ weather_data.current.condition.icon }}" alt="Weather Icon">
-    {% endif %}
+        <form method="POST" action="/weather">
+            <label for="location">Enter your location:</label>
+            <input type="text" id="location" name="location" placeholder="e.g. New York, Tokyo" required>
+            <button type="submit">Get Weather</button>
+        </form>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+
 </body>
 </html>
