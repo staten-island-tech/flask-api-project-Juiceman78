@@ -1,0 +1,93 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #87ceeb; /* Light blue background */
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    text-align: center;
+}
+
+/* Header */s
+h1 {
+    color: #ffffff;
+    font-size: 3rem; /* Larger font size */
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add a shadow for better visibility */
+}
+
+/* Form Styles */
+form {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 500px;
+}
+
+form label {
+    display: block;
+    font-weight: bold;
+    font-size: 1.2rem; /* Larger label font */
+    margin-bottom: 10px;
+}
+
+form input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 1.2rem; /* Larger input font */
+}
+
+form button {
+    background-color: #0078d7;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 1.2rem; /* Larger button font */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #005bb5;
+}
+
+/* Error Message */
+p[style="color: red;"] {
+    color: #d9534f;
+    font-weight: bold;
+    font-size: 1.2rem; /* Larger error message font */
+}
+
+/* Weather Data Styles */
+h2 {
+    color: #ffffff;
+    font-size: 2rem; /* Larger font size for weather heading */
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+p {
+    font-size: 1.5rem; /* Larger font size for weather details */
+    margin: 10px 0;
+}
+
+img {
+    margin-top: 15px;
+    border: 2px solid #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100px; /* Resize the weather icon */
+    height: 100px;
+}
