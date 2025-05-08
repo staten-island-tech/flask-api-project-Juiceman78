@@ -3,48 +3,73 @@ import requests
 from dotenv import load_dotenv
 import os
 
-# Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Required for using session
+app.secret_key = 'your_secret_key'  # Needed for session
 
-# Get the API key from the .env file
 WEATHER_API_KEY = os.getenv('API_KEY')
 
-@app.route('/', methods=['GET'])
+# --------------------------
+# Reusable Weather Function
+# --------------------------
+def fetch_weather(location):
+    try:
+        url = f"http://api.weatherapi.com/v1/forecast.json?key={WEATHER_API_KEY}&q={location}&days=1"
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        return {'error': str(e)}
+
+# --------------------------
+# Homepage Route
+# --------------------------
+@app.route('/')
 def index():
-    # Display the form only
-    error = session.pop('error', None)  # Get and remove error if it exists
+    error = session.pop('error', None)
     return render_template('index.html', error=error)
 
-@app.route('/weather', methods=['POST', 'GET'])
-def weather():
-    if request.method == 'POST':
-        location = request.form.get('location')
+# --------------------------
+# Handle Form Submission
+# --------------------------
+@app.route('/weather', methods=['POST'])
+def redirect_to_city():
+    location = request.form.get('location')
+    if location:
+        return redirect(url_for('weather_by_city', city=location))
+    else:
+        session['error'] = "Please enter a valid location."
+        return redirect(url_for('index'))
 
-        if location:
-            # Make a request to WeatherAPI
-            url = f"http://api.weatherapi.com/v1/current.json?key={WEATHER_API_KEY}&q={location}"
-            try:
-                response = requests.get(url)
-                response.raise_for_status()
-                weather_data = response.json()
-                session['weather_data'] = weather_data
-                return redirect(url_for('weather'))  # GET method to display results
-            except requests.RequestException as e:
-                session['error'] = f"Error fetching weather data: {e}"
-                return redirect(url_for('index'))
-        else:
-            session['error'] = "Please enter a location."
-            return redirect(url_for('index'))
+# --------------------------
+# Dynamic URL: Show weather
+# --------------------------
+@app.route('/weather/<city>')
+def weather_by_city(city):
+    data = fetch_weather(city)
+    
+    if 'error' in data:
+        return render_template('error.html', message=data['error']), 400
 
-    # GET request — show the weather result page
-    weather_data = session.get('weather_data')
-    if not weather_data:
-        return redirect(url_for('index'))  # No data? Redirect back
+    # Filter forecast: only show warm hours
+    warm_hours = [
+        hour for hour in data['forecast']['forecastday'][0]['hour']
+        if hour['temp_c'] > 20
+    ]
 
-    return render_template('weather.html', weather_data=weather_data)
+    return render_template(
+        'weather.html',
+        weather_data=data,
+        warm_hours=warm_hours
+    )
+
+# --------------------------
+# Error Page Route (Optional)
+# --------------------------
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error.html', message="Page not found."), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

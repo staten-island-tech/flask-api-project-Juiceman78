@@ -2,23 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Results</title>
+    <title>Weather Result</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
     <div class="container">
         <h2>🌍 Weather in {{ weather_data.location.name }}, {{ weather_data.location.country }}</h2>
 
-        <p class="flashing">✨ Weather updated just now!</p>
-        <p>🌡️ Temperature: {{ weather_data.current.temp_c }}°C / {{ weather_data.current.temp_f }}°F</p>
+        <p>🌡️ Temp: {{ weather_data.current.temp_c }}°C / {{ weather_data.current.temp_f }}°F</p>
         <p>🌥️ Condition: {{ weather_data.current.condition.text }}</p>
         <img src="{{ weather_data.current.condition.icon }}" alt="Weather Icon">
 
-        <a href="/" class="link-button">🔁 Search Again</a>
-        <a href="https://weatherapi.com" target="_blank" class="link-button">☁️ Powered by WeatherAPI</a>
-    </div>
+        <hr>
 
+        <h3>🔥 Warm Hours (Over 20°C Today)</h3>
+        {% if warm_hours %}
+            {% for hour in warm_hours %}
+                <p>{{ hour.time[-5:] }} – {{ hour.temp_c }}°C – {{ hour.condition.text }}</p>
+            {% endfor %}
+        {% else %}
+            <p>No warm hours today.</p>
+        {% endif %}
+
+        <a href="/" class="link-button">🔁 Search Again</a>
+    </div>
 </body>
 </html>
+
